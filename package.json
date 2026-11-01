@@ -1,0 +1,9 @@
+{
+  "name": "yinian-capture-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "description": "统一自然语言输入入口 · 交互原型 V1",
+  "scripts": {
+    "dev": "node server.js"
+  }
+}
