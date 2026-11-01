@@ -379,6 +379,11 @@ if (typeof document !== 'undefined') {
       </div>`).join('');
     $('inboxEmpty').style.display = inbox.length ? 'none' : '';
     $('inboxCount').textContent = inbox.length || '';
+    const tabBadge = $('tabInboxCount');
+    if (tabBadge) {
+      tabBadge.textContent = inbox.length || '';
+      tabBadge.style.display = inbox.length ? '' : 'none';
+    }
 
     $('eventList').innerHTML = events.map(miniItem).join('');
     $('eventEmpty').style.display = events.length ? 'none' : '';
@@ -440,6 +445,16 @@ if (typeof document !== 'undefined') {
   document.addEventListener('dragend', e => {
     const row = e.target.closest && e.target.closest('[data-id]');
     if (row) row.classList.remove('dragging');
+  });
+
+  // 底部标签导航：单视图切换，页面永远只有一屏内容
+  document.querySelectorAll('.tabbar button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.view').forEach(v => { v.hidden = v.id !== 'view-' + btn.dataset.view; });
+      if (btn.dataset.view === 'cal' && window.YinianCal) window.YinianCal.render();
+      window.scrollTo({ top: 0 });
+    });
   });
 
   // 暴露给日历模块（calendar.js）

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>一念 · 统一输入原型 V1</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -18,52 +18,66 @@
       </div>
     </div>
     <div class="topbar-right">
-      <span class="kbd-hint"><kbd>⌘K</kbd> 唤起输入</div>
+      <span class="kbd-hint"><kbd>⌘K</kbd> 唤起输入</span>
       <button id="clearData" class="ghost-btn">清空数据</button>
     </div>
   </header>
 
   <main>
-    <!-- ===== 捕捉区 ===== -->
-    <section class="capture">
-      <div class="capture-box" id="captureBox">
-        <div class="capture-mirror" id="mirror" aria-hidden="true"></div>
-        <input id="omniInput" type="text" autocomplete="off" spellcheck="false"
-               placeholder="写下任何事，剩下的交给一念…">
-        <div class="capture-enter" id="enterHint">⏎</div>
-      </div>
-
-      <div class="examples" id="examples">
-        <span class="examples-label">试试看：</span>
-        <button class="chip-example">明天下午3点和小王开会</button>
-        <button class="chip-example">提醒我30分钟后喝水</button>
-        <button class="chip-example">周五前交季度报告</button>
-        <button class="chip-example">心流：全神贯注时人会忘记时间</button>
-      </div>
-
-      <!-- 实时预览卡 -->
-      <div class="preview" id="preview" hidden>
-        <div class="preview-head">
-          <div class="type-badge" id="typeBadge">
-            <span class="type-dot" id="typeDot"></span>
-            <span id="typeName">待办</span>
-            <span class="confidence" id="confidenceMark"></span>
-          </div>
-          <div class="type-switch" id="typeSwitch">
-            <button data-type="event">日程</button>
-            <button data-type="todo">待办</button>
-            <button data-type="reminder">提醒</button>
-            <button data-type="note">笔记</button>
-          </div>
+    <!-- ===== 视图：今天（首页） ===== -->
+    <div class="view" id="view-today">
+      <section class="capture">
+        <div class="capture-box" id="captureBox">
+          <div class="capture-mirror" id="mirror" aria-hidden="true"></div>
+          <input id="omniInput" type="text" autocomplete="off" spellcheck="false"
+                 placeholder="写下任何事，剩下的交给一念…">
+          <div class="capture-enter" id="enterHint">⏎</div>
         </div>
-        <div class="preview-title" id="previewTitle"></div>
-        <div class="preview-meta" id="previewMeta"></div>
-        <div class="preview-foot" id="previewFoot"></div>
-      </div>
-    </section>
 
-    <!-- ===== 归位区 ===== -->
-    <section class="grid">
+        <div class="examples" id="examples">
+          <span class="examples-label">试试看：</span>
+          <button class="chip-example">明天下午3点和小王开会</button>
+          <button class="chip-example">提醒我30分钟后喝水</button>
+          <button class="chip-example">周五前交季度报告</button>
+          <button class="chip-example">心流：全神贯注时人会忘记时间</button>
+        </div>
+
+        <!-- 实时预览卡 -->
+        <div class="preview" id="preview" hidden>
+          <div class="preview-head">
+            <div class="type-badge" id="typeBadge">
+              <span class="type-dot" id="typeDot"></span>
+              <span id="typeName">待办</span>
+              <span class="confidence" id="confidenceMark"></span>
+            </div>
+            <div class="type-switch" id="typeSwitch">
+              <button data-type="event">日程</button>
+              <button data-type="todo">待办</button>
+              <button data-type="reminder">提醒</button>
+              <button data-type="note">笔记</button>
+            </div>
+          </div>
+          <div class="preview-title" id="previewTitle"></div>
+          <div class="preview-meta" id="previewMeta"></div>
+          <div class="preview-foot" id="previewFoot"></div>
+        </div>
+      </section>
+
+      <div class="panel panel-today">
+        <div class="panel-head">
+          <h2>今天</h2>
+          <span class="panel-date" id="todayLabel"></span>
+          <span class="panel-weather" id="todayWeather"></span>
+        </div>
+        <div id="todayEvents" class="timeline"></div>
+        <div class="panel-subhead">待办</div>
+        <div id="todayTodos" class="todo-list"></div>
+        <div class="empty" id="todayEmpty">今天的安排会出现在这里</div>
+      </div>
+    </div>
+
+    <!-- ===== 视图：日历 ===== -->
+    <div class="view" id="view-cal" hidden>
       <div class="panel panel-cal">
         <div class="panel-head">
           <h2>日历</h2>
@@ -77,21 +91,13 @@
         </div>
         <div class="cal-weekdays"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
         <div class="cal-grid" id="calGrid"></div>
-        <div class="cal-tip">把待办拖到某一天即可排期；拖动日程可改期</div>
+        <div class="cal-tip">拖动待办到某天即可排期；拖动日程可改期 · 双击日期快速添加</div>
         <div class="cal-day-detail" id="calDayDetail" hidden></div>
       </div>
+    </div>
 
-      <div class="panel panel-today">
-        <div class="panel-head">
-          <h2>今天</h2>
-          <span class="panel-date" id="todayLabel"></span>
-        </div>
-        <div id="todayEvents" class="timeline"></div>
-        <div class="panel-subhead">待办</div>
-        <div id="todayTodos" class="todo-list"></div>
-        <div class="empty" id="todayEmpty">今天的安排会出现在这里</div>
-      </div>
-
+    <!-- ===== 视图：收集箱 ===== -->
+    <div class="view" id="view-inbox" hidden>
       <div class="panel panel-inbox">
         <div class="panel-head">
           <h2>收集箱</h2>
@@ -101,26 +107,35 @@
         <div id="inboxList"></div>
         <div class="empty" id="inboxEmpty">没有待确认的内容</div>
       </div>
+    </div>
 
+    <!-- ===== 视图：更多 ===== -->
+    <div class="view" id="view-more" hidden>
       <div class="panel">
         <div class="panel-head"><h2>日程</h2><span class="panel-badge" id="eventCount"></span></div>
         <div id="eventList" class="mini-list"></div>
         <div class="empty" id="eventEmpty">暂无日程</div>
       </div>
-
       <div class="panel">
         <div class="panel-head"><h2>提醒</h2><span class="panel-badge" id="reminderCount"></span></div>
         <div id="reminderList" class="mini-list"></div>
         <div class="empty" id="reminderEmpty">暂无提醒</div>
       </div>
-
       <div class="panel">
         <div class="panel-head"><h2>笔记</h2><span class="panel-badge" id="noteCount"></span></div>
         <div id="noteList" class="mini-list"></div>
         <div class="empty" id="noteEmpty">暂无笔记</div>
       </div>
-    </section>
+    </div>
   </main>
+
+  <!-- ===== 底部标签导航 ===== -->
+  <nav class="tabbar">
+    <button data-view="today" class="active"><span class="tab-icon">今</span>今天</button>
+    <button data-view="cal"><span class="tab-icon">历</span>日历</button>
+    <button data-view="inbox"><span class="tab-icon">箱</span>收集箱<span class="tab-badge" id="tabInboxCount" style="display:none"></span></button>
+    <button data-view="more"><span class="tab-icon">…</span>更多</button>
+  </nav>
 </div>
 
 <!-- Snackbar：事后撤销，不做事前确认 -->

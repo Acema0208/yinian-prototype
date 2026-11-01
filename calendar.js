@@ -66,6 +66,8 @@
     const today = new Date().toISOString().slice(0, 10);
     const w = weather && weather[today];
     $('calCity').textContent = w ? `${city} ${w.icon} ${w.min}~${w.max}°` : city;
+    const tw = $('todayWeather');
+    if (tw) tw.textContent = w ? `${city} ${w.icon} ${w.label} ${w.min}~${w.max}°` : '';
   }
 
   $('calCity').addEventListener('click', () => {
