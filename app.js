@@ -346,7 +346,7 @@ if (typeof document !== 'undefined') {
     const reminders = filed.filter(i => i.type === 'reminder');
     const notes = filed.filter(i => i.type === 'note');
 
-    $('todayLabel').textContent = dateLabel(0) + ' ' + new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' }).replace(/^\d+月/, '');
+    $('todayLabel').textContent = new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
 
     $('todayEvents').innerHTML = todayEv.map(it => `
       <div class="timeline-item" data-id="${it.id}" draggable="true">
